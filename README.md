@@ -6,7 +6,7 @@ A fully client-side social media web app where users can sign up, create posts, 
 
 ## 🔗 Live Demo
 
-**[https://your-live-demo-link.vercel.app]
+**[https://social-app-seven-green.vercel.app/]
 
 ---
 
