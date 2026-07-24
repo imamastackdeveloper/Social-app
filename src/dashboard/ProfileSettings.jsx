@@ -4,6 +4,7 @@ import useAuth from '../hooks/useAuth';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Avatar from '../components/ui/Avatar';
+import AIProfileOptimize from '../components/ai/AIProfileOptimize';
 import { fileToBase64 } from '../utils/helpers';
 
 /**
@@ -171,6 +172,16 @@ const ProfileSettings = () => {
             >
               {bio.length}/{maxBioLength}
             </p>
+
+            {/* AI Profile Optimizer */}
+            <div className="mt-3">
+              <AIProfileOptimize
+                bio={bio}
+                name={watch('name', '')}
+                location={watch('location', '')}
+                onUseSuggestion={(suggestion) => setValue('bio', suggestion)}
+              />
+            </div>
           </div>
 
           {/* Location */}

@@ -88,9 +88,15 @@ export const AuthProvider = ({ children }) => {
       joinedAt: user.joinedAt,
     };
 
-    setCurrentUser(safeUser);
-    setUserState(safeUser);
+    const lastSeen = new Date().toISOString();
+    setCurrentUser({ ...safeUser, lastSeen });
+    setUserState({ ...safeUser, lastSeen });
     setIsAuthenticated(true);
+
+    const updatedUsers = users.map((u) =>
+      u.id === user.id ? { ...u, lastSeen } : u
+    );
+    setUsers(updatedUsers);
 
     return { success: true, message: 'Login successful' };
   }, []);

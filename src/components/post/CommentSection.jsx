@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from '../ui/Avatar';
 import Button from '../ui/Button';
+import AICommentSuggest from '../ai/AICommentSuggest';
 import useAuth from '../../hooks/useAuth';
 import usePosts from '../../hooks/usePosts';
 import { formatRelativeTime } from '../../utils/helpers';
-import { getUsers } from '../../utils/storage';
+import { getUsers, getPosts } from '../../utils/storage';
 
 const CommentSection = ({ postId }) => {
   const { currentUser, isAuthenticated } = useAuth();
@@ -14,8 +15,9 @@ const CommentSection = ({ postId }) => {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
 
   const comments = getPostComments(postId);
-
   const users = getUsers();
+  const posts = getPosts();
+  const post = posts.find((p) => p.id === postId);
 
   const handleSubmitComment = (e) => {
     e.preventDefault();
@@ -36,26 +38,34 @@ const CommentSection = ({ postId }) => {
       </h3>
 
       {isAuthenticated ? (
-        <form onSubmit={handleSubmitComment} className="flex items-start gap-3">
-          <Avatar src={currentUser?.avatar} name={currentUser?.name} size="sm" />
-          <div className="flex-1">
-            <input
-              type="text"
-              value={commentText}
-              onChange={(e) => setCommentText(e.target.value)}
-              placeholder="Write a comment..."
-              className="input-field text-sm"
+        <div className="space-y-2">
+          <form onSubmit={handleSubmitComment} className="flex items-start gap-3">
+            <Avatar src={currentUser?.avatar} name={currentUser?.name} size="sm" />
+            <div className="flex-1">
+              <input
+                type="text"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Write a comment..."
+                className="input-field text-sm"
+              />
+            </div>
+            <Button
+              type="submit"
+              size="sm"
+              disabled={!commentText.trim()}
+              variant="primary"
+            >
+              Post
+            </Button>
+          </form>
+          {post?.description && (
+            <AICommentSuggest
+              postDescription={post.description}
+              onUseSuggestion={(suggestion) => setCommentText(suggestion)}
             />
-          </div>
-          <Button
-            type="submit"
-            size="sm"
-            disabled={!commentText.trim()}
-            variant="primary"
-          >
-            Post
-          </Button>
-        </form>
+          )}
+        </div>
       ) : (
         <p className="text-sm text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center">
           <Link to="/login" className="text-primary-500 hover:underline font-medium">

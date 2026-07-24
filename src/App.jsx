@@ -6,21 +6,21 @@ import Footer from './components/layout/Footer';
 import DashboardLayout from './dashboard/DashboardLayout';
 import { getDarkMode } from './utils/storage';
 
-// Lazy load all pages for code splitting
 const FeedPage = lazy(() => import('./pages/FeedPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const SignupPage = lazy(() => import('./pages/SignupPage'));
 const PostDetailPage = lazy(() => import('./pages/PostDetailPage'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const PeoplePage = lazy(() => import('./pages/PeoplePage'));
+const FriendRequestsPage = lazy(() => import('./pages/FriendRequestsPage'));
+const FriendsPage = lazy(() => import('./pages/FriendsPage'));
+const ChatPage = lazy(() => import('./pages/ChatPage'));
 const PostsDashboard = lazy(() => import('./dashboard/PostsDashboard'));
 const CreatePost = lazy(() => import('./dashboard/CreatePost'));
 const EditPost = lazy(() => import('./dashboard/EditPost'));
 const ProfileSettings = lazy(() => import('./dashboard/ProfileSettings'));
 
-/**
- * Loading fallback component shown while pages are being lazy loaded
- */
 const PageLoader = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
     <div className="flex flex-col items-center gap-3">
@@ -30,13 +30,7 @@ const PageLoader = () => (
   </div>
 );
 
-/**
- * Main App component
- * Wraps everything with BrowserRouter and AuthProvider
- * Defines all routes with lazy loading and Suspense
- */
 const App = () => {
-  // Initialize dark mode from localStorage on mount
   useEffect(() => {
     const isDark = getDarkMode();
     if (isDark) {
@@ -113,6 +107,72 @@ const App = () => {
                 </main>
                 <Footer />
               </>
+            }
+          />
+
+          {/* People - Protected */}
+          <Route
+            path="/people"
+            element={
+              <>
+                <Navbar />
+                <main className="flex-1">
+                  <Suspense fallback={<PageLoader />}>
+                    <PeoplePage />
+                  </Suspense>
+                </main>
+                <Footer />
+              </>
+            }
+          />
+
+          {/* Friend Requests - Protected */}
+          <Route
+            path="/requests"
+            element={
+              <>
+                <Navbar />
+                <main className="flex-1">
+                  <Suspense fallback={<PageLoader />}>
+                    <FriendRequestsPage />
+                  </Suspense>
+                </main>
+                <Footer />
+              </>
+            }
+          />
+
+          {/* Friends List - Protected */}
+          <Route
+            path="/friends"
+            element={
+              <>
+                <Navbar />
+                <main className="flex-1">
+                  <Suspense fallback={<PageLoader />}>
+                    <FriendsPage />
+                  </Suspense>
+                </main>
+                <Footer />
+              </>
+            }
+          />
+
+          {/* Chat - Protected */}
+          <Route
+            path="/chat"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <ChatPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/chat/:userId"
+            element={
+              <Suspense fallback={<PageLoader />}>
+                <ChatPage />
+              </Suspense>
             }
           />
 

@@ -1,13 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '../ui/Button';
+import AIPostAssistant from '../ai/AIPostAssistant';
 import { fileToBase64 } from '../../utils/helpers';
 
-/**
- * PostForm component for creating and editing posts
- * Supports description, image upload, visibility toggle, and draft saving
- * Includes live character counter and live image preview (bonus features)
- */
 const PostForm = ({
   initialData = null,
   onSubmit,
@@ -94,8 +90,15 @@ const PostForm = ({
     }
   };
 
+  const handleAIContent = (content) => {
+    setValue('description', content);
+  };
+
   return (
     <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-4">
+      {/* AI Writing Assistant */}
+      <AIPostAssistant onUseContent={handleAIContent} />
+
       {/* Description field */}
       <div>
         <textarea
